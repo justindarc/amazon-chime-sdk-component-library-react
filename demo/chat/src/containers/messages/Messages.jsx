@@ -29,7 +29,7 @@ import {
 import insertDateHeaders from '../../utilities/insertDateHeaders';
 
 import './Messages.css';
-import { useChatChannelState } from '../../providers/ChatMessagesProvider';
+import { useChatChannelState, useChatMessagingState } from '../../providers/ChatMessagesProvider';
 
 const Messages = ({
   messages,
@@ -41,8 +41,8 @@ const Messages = ({
   setChannelMessageToken,
   activeChannelRef,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const { channelMessageTokenRef } = useChatChannelState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleScrollTop = async () => {
     setIsLoading(true);
@@ -65,6 +65,7 @@ const Messages = ({
 
   const [showDiscardModal, setShowDiscardModal] = useState(false);
   const [showRedactModal, setShowRedactModal] = useState(false);
+
   const [editingMessageId, setEditingMessageId] = useState('');
   const [redactingMessageId, setRedactingMessageId] = useState('');
 
@@ -139,7 +140,7 @@ const Messages = ({
       </ModalBody>
     </Modal>
   );
-
+  
   const cancelEdit = (e) => {
     e.preventDefault();
     setShowDiscardModal(true);
@@ -192,6 +193,13 @@ const Messages = ({
       return m;
     }
 
+    if (m.Metadata) {
+      let metadata = JSON.parse(m.Metadata);
+      if (metadata.isMeetingInfo) {
+        return m;
+      };
+    }
+ 
     const variant =
       createMemberArn(userId) === m.senderId ? 'outgoing' : 'incoming';
     let actions = null;
@@ -271,7 +279,7 @@ const Messages = ({
                 {m.content}
                 {m.editedNote}
               </div>
-              {m.metadata && (
+              {m.metadata && attachment(m.metadata) && (
                 <div style={{ marginTop: '10px' }}>
                   <AttachmentProcessor
                     senderId={m.senderId}

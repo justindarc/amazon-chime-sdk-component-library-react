@@ -1,0 +1,58 @@
+.join-meeting-box {
+    width: 438px;
+    height: 316px;
+    margin: 33px 430px 21px 135px;
+    padding: 11px 0 47px;
+}
+
+.meeting-header {
+    width: 438px;
+    height: 144px;
+    margin: 0 0 16px;
+    padding: 48px 0 28px;
+}
+
+.meeting-title .ch-title{
+    height: 48px;
+    font-family: AmazonEmber;
+    font-size: 25.5px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.88;
+    letter-spacing: -0.16px;
+    text-align: center;
+    color: var(--grey-80);
+}
+
+.inviter .ch-title{
+    height: 20px;
+    margin: 48px 0 0;
+    font-family: AmazonEmber;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: -0.09px;
+    text-align: center;
+    color: var(--grey-70);
+}
+
+.decline-button {
+    width: 139px;
+    height: 44px;
+    margin: 0 32px 23px 0;
+    padding: 6px 25px 6px 19px;
+    border-radius: 22px;
+    background-color: var(--light-error);
+}
+
+.join-button {
+    width: 139px;
+    height: 44px;
+    margin: 0 0 23px 32px;
+    padding: 6px 46px 6px 26px;
+    border-radius: 22px;
+    background-color: var(--light-success);
+}

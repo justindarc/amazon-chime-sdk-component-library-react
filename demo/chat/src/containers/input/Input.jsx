@@ -87,6 +87,7 @@ const Input = ({ activeChannelArn, member, hasMembership }) => {
         await sendChannelMessage(
           activeChannelArn,
           text || ' ',
+          'PERSISTENT',
           member,
           options
         );
@@ -101,7 +102,7 @@ const Input = ({ activeChannelArn, member, hasMembership }) => {
         throw new Error(`Failed uploading... ${err}`);
       }
     } else {
-      await sendChannelMessage(activeChannelArn, text, member);
+      await sendChannelMessage(activeChannelArn, text, 'PERSISTENT', member);
     }
     resetState();
   };

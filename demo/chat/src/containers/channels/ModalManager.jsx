@@ -12,15 +12,19 @@ import {
   ViewMembersModal,
   EditChannelModal,
   BanModal,
+  JoinMeetingModal,
 } from '../../components/ChannelModals';
 
 const ModalManager = ({
   modal,
   setModal,
   activeChannel,
+  meetingInfo,
   userId,
   onAddMember,
   handleChannelDeletion,
+  handleJoinMeeting,
+  handleMessageAll,
   handleDeleteMemberships,
   handlePickerChange,
   formatMemberships,
@@ -121,6 +125,15 @@ const ModalManager = ({
           handleChannelDeletion={handleChannelDeletion}
         />
       );
+      case 'JoinMeeting':
+        return (
+          <JoinMeetingModal
+            onClose={() => setModal('')}
+            meetingInfo={meetingInfo}
+            handleJoinMeeting={handleJoinMeeting}
+            handleMessageAll={handleMessageAll}
+          />
+        );
     default:
       console.log('Unknown modal type called');
       return null;
