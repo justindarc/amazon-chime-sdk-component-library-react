@@ -14,7 +14,7 @@ import { DeviceChangeObserver } from 'amazon-chime-sdk-js';
 import { useAudioVideo } from '../AudioVideoProvider';
 import { useMeetingManager } from '../MeetingProvider';
 import { getFormattedDropdownDeviceOptions } from '../../utils/device-utils';
-import { DeviceTypeContext, DeviceConfig } from '../../types';
+import { DeviceTypeContext, DeviceConfig, Device, } from '../../types';
 import { AUDIO_INPUT } from '../../constants/additional-audio-video-devices';
 
 const Context = createContext<DeviceTypeContext | null>(null);
@@ -31,6 +31,15 @@ const AudioInputProvider: React.FC = ({ children }) => {
   const [selectAudioInputDeviceError, setSelectAudioInputDeviceError] = useState(
     meetingManager.selectAudioInputDeviceError
   );
+  const [isInitAllowed, setIsInitAllowed] = useState(true);
+
+  useEffect(() => {
+    const callback = (): void => {
+      setIsInitAllowed(false);
+    };
+    meetingManager.setSkipDeviceProviderInit(Device.AudioInput, callback);
+  });
+
 
   useEffect(() => {
     const callback = (selectAudioInputDeviceError: Error | null): void => {
@@ -104,7 +113,11 @@ const AudioInputProvider: React.FC = ({ children }) => {
       }
     }
 
-    initAudioInput();
+    meetingManager.setInvokeDeviceProviderInit(Device.AudioInput, initAudioInput);
+
+    if (isInitAllowed === true) {
+      initAudioInput();
+    }
 
     return () => {
       isMounted = false;
@@ -135,7 +148,7 @@ const useAudioInputs = (props?: DeviceConfig): DeviceTypeContext => {
   let { devices } = context;
   const { selectedDevice } = context;
   const { selectDeviceError } = context;
-  
+
   if (needAdditionalIO) {
     const additionalAudioInputs = getFormattedDropdownDeviceOptions(
       AUDIO_INPUT

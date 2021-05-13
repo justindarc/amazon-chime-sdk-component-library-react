@@ -12,7 +12,7 @@ import { DeviceChangeObserver } from 'amazon-chime-sdk-js';
 
 import { useAudioVideo } from '../AudioVideoProvider';
 import { useMeetingManager } from '../MeetingProvider';
-import { DeviceTypeContext, DeviceConfig } from '../../types';
+import { DeviceTypeContext, DeviceConfig, Device, } from '../../types';
 import { VIDEO_INPUT } from '../../constants/additional-audio-video-devices';
 import { getFormattedDropdownDeviceOptions } from '../../utils/device-utils';
 
@@ -28,6 +28,14 @@ const VideoInputProvider: React.FC = ({ children }) => {
   const [selectVideoInputDeviceError, setSelectVideoInputDeviceError] = useState(
     meetingManager.selectVideoInputDeviceError
   );
+  const [isInitAllowed, setIsInitAllowed] = useState(true);
+
+  useEffect(() => {
+    const callback = (): void => {
+      setIsInitAllowed(false);
+    };
+    meetingManager.setSkipDeviceProviderInit(Device.VideoInput, callback);
+  });
 
   useEffect(() => {
     const callback = (selectVideoInputDeviceError: Error | null): void => {
@@ -76,7 +84,11 @@ const VideoInputProvider: React.FC = ({ children }) => {
       }
     }
 
-    initVideoInput();
+    meetingManager.setInvokeDeviceProviderInit(Device.VideoInput, initVideoInput);
+
+    if (isInitAllowed === true) {
+      initVideoInput();
+    }
 
     return () => {
       isMounted = false;
@@ -108,7 +120,7 @@ const useVideoInputs = (props?: DeviceConfig): DeviceTypeContext => {
   let { devices } = context;
   const { selectedDevice } = context;
   const { selectDeviceError } = context;
-  
+
   if (needAdditionalIO) {
     const additionalVideoInputs = getFormattedDropdownDeviceOptions(
       additionalIOJSON

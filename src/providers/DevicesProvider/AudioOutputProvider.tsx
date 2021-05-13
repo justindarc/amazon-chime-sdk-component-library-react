@@ -12,7 +12,7 @@ import { DeviceChangeObserver } from 'amazon-chime-sdk-js';
 
 import { useAudioVideo } from '../AudioVideoProvider';
 import { useMeetingManager } from '../MeetingProvider';
-import { DeviceTypeContext } from '../../types';
+import { DeviceTypeContext, Device, } from '../../types';
 
 const AudioOutputContext = createContext<DeviceTypeContext | null>(null);
 
@@ -23,6 +23,14 @@ const AudioOutputProvider: React.FC = ({ children }) => {
   const [selectedAudioOutputDevice, setSelectedAudioOutputDevice] = useState(
     meetingManager.selectedAudioOutputDevice
   );
+  const [isInitAllowed, setIsInitAllowed] = useState(true);
+
+  useEffect(() => {
+    const callback = (): void => {
+      setIsInitAllowed(false);
+    };
+    meetingManager.setSkipDeviceProviderInit(Device.AudioOutput, callback);
+  });
 
   useEffect(() => {
     const callback = (updatedAudioOutputDevice: string | null): void => {
@@ -59,7 +67,11 @@ const AudioOutputProvider: React.FC = ({ children }) => {
       }
     }
 
-    initAudioOutput();
+    meetingManager.setInvokeDeviceProviderInit(Device.AudioOutput, initAudioOutput);
+
+    if (isInitAllowed === true) {
+      initAudioOutput();
+    }
 
     return () => {
       isMounted = false;

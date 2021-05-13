@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+
 - Add or remove event listener only when `el.current` reference is valid
   in `useFocusIn` and `useMouseMove` hooks.
 - Fix bug related to `PreviewVideo` component not releasing media stream when unmounted.
@@ -19,12 +20,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added optional props to specify icon titles in the `AudioInputControl` and `ContentShareControl` components.
 - Added optional props to specify the dropdown text that shows when no video quality is selected, in the `QualitySelection` component.
 - Added observer to `selectAudioInputDeviceError` and `selectVideoInputDeviceError` to deliver the error from SDK level to client application level.
+- Added optional parameter `deviceLabels` in `meetingManager.join()`. The device that the browser will request permission can be set through this parameter. The customized `deviceLabelTrigger` function could also be set through it.
+- Added `invokeDeviceProviderInit(device: Device)` function to invoke the function of that kind of `DeviceProvider`.
+- Added `skipDeviceProviderInit(device: Device)` function to suppress the function of that kind of `DeviceProvider`. The function of `DeviceProvider` can be invoked using `invokeDeviceProviderInit(device: Device)` function.
+- Added optional parameter `device` in severals `MeetingManager` functions to support the `device` specific operation.
   
 ### Changed
 
 - Change `package-lock` to V2 to support NPM 7.
-- Update `engines` field in `package.json` to include Node 16
-- Bump `hosted-git-info` version
+- Update `engines` field in `package.json` to include Node 16.
+- Bump `hosted-git-info` version.
 
 ### Removed
 
